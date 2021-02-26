@@ -8,7 +8,23 @@ const generateJWT = (payload) =>
     })
   );
 
+const generateRJWT = (payload) =>
+  new Promise((res, rej) =>
+    jwt.sign(payload, process.env.REFRESH_SECRET, { expiresIn: 30000 }, (err, token) => {
+      if (err) rej(err);
+      res(token);
+    })
+  );
+
 const verifyJWT = (token) =>
+  new Promise((res, rej) =>
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) rej(err);
+      res(decoded);
+    })
+  );
+
+const verifyRJWT = (token) =>
   new Promise((res, rej) =>
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) rej(err);
@@ -18,9 +34,9 @@ const verifyJWT = (token) =>
 
 const authorise = async (req, res, next) => {
   const token = req.cookies.accessToken;
-  const { username } = await verifyJWT(token);
-  req.username = username;
+  const { _id } = await verifyJWT(token);
+  req.id = _id;
   next();
 };
 
-module.exports = { generateJWT, verifyJWT, authorise };
+module.exports = { generateJWT, generateRJWT, verifyJWT, verifyRJWT, authorise };

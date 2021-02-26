@@ -1,3 +1,8 @@
+const errorHandler = async (err, req, res, next) => {
+  let error = await errorProcessor(err);
+  res.send(error);
+};
+
 const errorProcessor = async (err, req, res, next) => {
   switch (err.httpStatusCode) {
     case 400:
@@ -24,4 +29,4 @@ const errorProcessor = async (err, req, res, next) => {
   }
 };
 
-module.exports = { errorProcessor };
+module.exports = { errorHandler };

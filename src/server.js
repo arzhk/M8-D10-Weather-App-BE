@@ -3,7 +3,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const services = require("./services");
 const cookieParser = require("cookie-parser");
-const { errorProcessor } = require("./errorHandling");
+
+const { errorMiddleware } = require("./errorMiddleware");
+const { errorHandler } = require("./errorHandling");
 
 const server = express();
 const port = process.env.PORT || 3001;
@@ -31,18 +33,18 @@ server.use(loggerMiddleware);
 
 server.use("/api", services);
 
-server.use(errorProcessor);
+server.use(errorMiddleware);
+server.use(errorHandler);
 
 mongoose
   .connect(process.env.MONGO_CONNECT, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
   })
   .then(
     server.listen(port, () => {
       console.log("Server is running on port: ", port);
     })
   );
-
-// TO GENERATE A SECRET TYPE openssl rand -base64 172 into the terminal
-// If leaked, can generate jwt tokens for project -- BAD!
