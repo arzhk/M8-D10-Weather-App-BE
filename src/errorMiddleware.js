@@ -1,7 +1,6 @@
 const errorMiddleware = async (err, req, res, next) => {
   let formattedError = {};
   let typeText = "";
-  console.log(err);
 
   if (err.httpStatusCode === 404) typeText = "Data not found.";
   if (err.httpStatusCode === 400) typeText = "Invalid data.";
