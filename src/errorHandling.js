@@ -1,6 +1,6 @@
 const errorHandler = async (err, req, res, next) => {
   let error = await errorProcessor(err);
-  res.send(error);
+  res.send(err);
 };
 
 const errorProcessor = async (err, req, res, next) => {

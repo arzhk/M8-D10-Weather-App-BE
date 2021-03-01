@@ -17,10 +17,13 @@ const userSchema = new Schema(
     },
     lastName: String,
     favourites: [],
-    refreshToken: [],
     role: {
       type: String,
       enum: ["admin", "user"],
+    },
+    img: {
+      type: String,
+      default: "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png",
     },
   },
   {
@@ -43,6 +46,8 @@ userSchema.methods.toJSON = function () {
 
   delete userObject.password;
   delete userObject.__v;
+  delete userObject.createdAt;
+  delete userObject.updatedAt;
   return userObject;
 };
 
@@ -57,7 +62,6 @@ userSchema.pre("save", async function (next) {
 
 userSchema.pre("findOneAndUpdate", async function (next) {
   const user = this.getUpdate();
-  console.log(user);
 
   const current = await UserSchema.findOne({ username: user.username });
   const isMatch = await bcrypt.compare(user.password, current.password);

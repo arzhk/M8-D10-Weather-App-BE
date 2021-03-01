@@ -33,10 +33,19 @@ const verifyRJWT = (token) =>
   );
 
 const authorise = async (req, res, next) => {
-  const token = req.cookies.accessToken;
-  const { _id } = await verifyJWT(token);
-  req.id = _id;
-  next();
+  console.log("trying auth", req.cookies.accessToken);
+  if (req.cookies.accessToken) {
+    const token = req.cookies.accessToken;
+    const { _id } = await verifyJWT(token);
+    if (_id) {
+      req.id = _id;
+      next();
+    } else {
+      throw new Error("Invalid Token");
+    }
+  } else {
+    next();
+  }
 };
 
 module.exports = { generateJWT, generateRJWT, verifyJWT, verifyRJWT, authorise };
