@@ -33,10 +33,10 @@ const verifyRJWT = (token) =>
   );
 
 const authorise = async (req, res, next) => {
-  console.log("trying auth", req.cookies.accessToken);
   if (req.cookies.accessToken) {
     const token = req.cookies.accessToken;
     const { _id } = await verifyJWT(token);
+
     if (_id) {
       req.id = _id;
       next();
