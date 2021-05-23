@@ -14,7 +14,7 @@ const loggerMiddleware = (req, res, next) => {
   next();
 };
 
-const whitelist = ["https://arzhk-weather-app.vercel.app"];
+const whitelist = ["https://arzhk-weather-app.vercel.app", "https://arzhk-weather-app.vercel.app/login"];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
