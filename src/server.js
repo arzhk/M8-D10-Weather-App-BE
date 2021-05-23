@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const services = require("./services");
 const cookieParser = require("cookie-parser");
 
-/* const { errorMiddleware } = require("./errorMiddleware"); */
 const { errorHandler } = require("./errorHandling");
 
 const server = express();
@@ -15,7 +14,7 @@ const loggerMiddleware = (req, res, next) => {
   next();
 };
 
-const whitelist = ["http://localhost:3000"];
+const whitelist = ["https://arzhk-weather-app.vercel.app"];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
@@ -33,7 +32,6 @@ server.use(loggerMiddleware);
 
 server.use("/api", services);
 
-/* server.use(errorMiddleware); */
 server.use(errorHandler);
 
 mongoose
