@@ -35,8 +35,13 @@ usersRouter.post("/login", async (req, res, next) => {
       if (isMatch) {
         const accessToken = await generateJWT({ _id });
         const refreshToken = await generateRJWT({ _id });
-        res.cookie("accessToken", accessToken, { path: "/", httpOnly: true });
-        res.cookie("refreshToken", refreshToken, { path: "/refreshToken", httpOnly: true });
+        res.cookie("accessToken", accessToken, { httpOnly: true, path: "/", secure: true, sameSite: "none" });
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          path: "/refreshToken",
+          secure: true,
+          sameSite: "none",
+        });
         res.send(user);
       } else {
         next(await errorHandler("Invalid username/password.", "N/A", 400));
